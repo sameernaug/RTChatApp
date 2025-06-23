@@ -23,7 +23,7 @@ app.use(cookieParser());
 app.use(
   cors({
     origin: process.env.NODE_ENV === "production" 
-      ? ["https://your-frontend-domain.com", "http://localhost:5173"] 
+      ? ["https://rtchatapp.netlify.app", "http://localhost:5173"] 
       : "http://localhost:5173",
     credentials: true,
   })
