@@ -22,7 +22,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Handle preflight requests
-app.options('*', cors());
+// app.options('*', cors());
 app.use(
   cors({
     origin: [
