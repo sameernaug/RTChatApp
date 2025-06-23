@@ -23,7 +23,7 @@ app.use(cookieParser());
 app.use(
   cors({
     origin: process.env.NODE_ENV === "production" 
-      ? "https://rtchatapp.netlify.app"
+      ? ["https://rtchatapp.netlify.app", "https://rtchatapp-new.onrender.com", "http://localhost:5173"]
       : "http://localhost:5173",
     credentials: true,
   })
@@ -32,13 +32,10 @@ app.use(
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../frontend/dist")));
-
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
-  });
-}
+// Health check endpoint
+app.get("/api/health", (req, res) => {
+  res.status(200).json({ message: "Backend is running successfully!" });
+});
 
 server.listen(PORT, () => {
   console.log("server is running on PORT:" + PORT);
