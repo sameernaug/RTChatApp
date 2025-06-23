@@ -23,12 +23,12 @@ app.use(cookieParser());
 
 // Handle preflight requests
 app.options('*', cors());
-
 app.use(
   cors({
-    origin: process.env.NODE_ENV === "production" 
-      ? ["https://rtchatapp.netlify.app", "http://localhost:5173"]
-      : "http://localhost:5173",
+    origin: [
+      "http://localhost:5173",
+      "https://rtchatapp.netlify.app"
+    ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
