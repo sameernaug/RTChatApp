@@ -10,7 +10,7 @@ const io = new Server(server, {
   cors: {
     origin: process.env.NODE_ENV === "production"
       ? "https://rtchatapp.netlify.app"
-      : "http://localhost:5173",
+      : ["http://localhost:5173"],
     credentials: true,
   },
 });
