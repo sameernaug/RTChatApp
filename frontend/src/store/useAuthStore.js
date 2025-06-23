@@ -1,8 +1,8 @@
 import { create } from "zustand";
-import { axiosInstance } from "../lib/axios.js";
+import { axiosInstance, testBackendConnection } from "../lib/axios.js";
 import toast from "react-hot-toast";
 import {io} from "socket.io-client"
-const BASE_URL = "https://rtchatapp-f7lv.onrender.com/";
+const BASE_URL = "https://rtchatapp-new.onrender.com/";
 
 export const useAuthStore = create((set, get) => ({
   authUser: null,
@@ -30,12 +30,15 @@ export const useAuthStore = create((set, get) => ({
   signup: async (data) => {
     set({ isSigningUp: true });
     try {
+      console.log("signup data:", data);
       const res = await axiosInstance.post("/auth/signup", data);
       set({ authUser: res.data });
       toast.success("Account created successfully");
       get().connectSocket()
     } catch (error) {
-      toast.error(error.response.data.message);
+      console.log("Signup error:", error);
+      const errorMessage = error.response?.data?.message || error.message || "Signup failed";
+      toast.error(errorMessage);
     } finally {
       set({ isSigningUp: false });
     }
@@ -44,13 +47,24 @@ export const useAuthStore = create((set, get) => ({
   login: async (data) => {
     set({ isLoggingIn: true });
     try {
+      console.log("Attempting login with data:", data);
+      console.log("Making request to:", "https://rtchatapp-new.onrender.com/api/auth/login");
+      
       const res = await axiosInstance.post("/auth/login", data);
+      console.log("Login response:", res);
       set({ authUser: res.data });
       toast.success("Logged in successfully");
 get().connectSocket()
       
     } catch (error) {
-      toast.error(error.response.data.message);
+      console.log("Login error details:", {
+        message: error.message,
+        response: error.response,
+        request: error.request,
+        config: error.config
+      });
+      const errorMessage = error.response?.data?.message || error.message || "Login failed";
+      toast.error(errorMessage);
     } finally {
       set({ isLoggingIn: false });
     }
@@ -63,7 +77,8 @@ get().connectSocket()
       toast.success("Logged out successfully");
       get().disconnectSocket();
     } catch (error) {
-      toast.error(error.response.data.message);
+      const errorMessage = error.response?.data?.message || error.message || "Logout failed";
+      toast.error(errorMessage);
     }
   },
 
@@ -75,7 +90,8 @@ get().connectSocket()
       toast.success("Profile updated successfully");
     } catch (error) {
       console.log("error in update profile:", error);
-      toast.error(error.response.data.message);
+      const errorMessage = error.response?.data?.message || error.message || "Profile update failed";
+      toast.error(errorMessage);
     } finally {
       set({ isUpdatingProfile: false });
     }
