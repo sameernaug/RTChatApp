@@ -24,7 +24,7 @@ app.use(
   cors({
     origin: process.env.NODE_ENV === "production" 
       ? ["https://rtchatapp.netlify.app", "http://localhost:5173"] 
-      : "http://localhost:5173",
+      : "https://rtchatapp.netlify.app",
     credentials: true,
   })
 );
